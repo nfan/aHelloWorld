@@ -1,0 +1,54 @@
+* {
+    border-radius: 0px !important;
+}
+
+.content {
+    margin-top: 20px;
+}
+
+.small-image {
+    margin-top: 10px;
+}
+
+.large-image {
+    clear: both;
+    display: block;
+    margin:auto;
+}
+
+.my-tile-1 {
+    background-color:#1ABC9C;
+}
+.my-tile-2 {
+    background-color:#8E44AD;
+}
+.my-tile-3 {
+    background-color:#2ECC71;
+}
+.my-tile-4 {
+    background-color:#E67E22;
+}
+.my-tile-5 {
+    background-color:#3498DB;
+}
+.my-tile-6 {
+    background-color:#E74C3C;
+}
+.my-tile-7 {
+    background-color:#9B59B6;
+}
+.my-tile-8 {
+    background-color:#95A5A6;
+}
+.my-tile-9 {
+    background-color:#16A085;
+}
+.my-tile-10 {
+    background-color:#F39C12;
+}
+.my-tile-11 {
+    background-color:#27AE60;
+}
+.my-tile-12 {
+    background-color:#D35400;
+}
