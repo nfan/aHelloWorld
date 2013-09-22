@@ -31,7 +31,16 @@ define(['underscore', 'backbone',
             */
             parseBeforeLocalSave: function(response) {
                 return response.formdata;
-            }
+            },
+            
+            fakeModel : function(sid) {
+				        var model;
+				        model = new CRMFormData({
+				          id: sid
+				        });
+				        model.collection = this; 
+				        return model;
+			      }
         });
        
        return CRMFormDataCollection;

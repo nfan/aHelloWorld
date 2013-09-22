@@ -1,17 +1,19 @@
-define(['underscore', 'backbone', 'jquery', 'bootstrap',
+define(['underscore', 'backbone', 'jquery', 'view/BaseView',
+        'bootstrap',
         'library/CRMApp',
         'library/CRMToken',
         'view/HomeView',
         'text!view/LoginView.html!strip'
        ],
        
-       function(_, Backbone, $, bootstrap, CRMApp, CRMToken, HomeView, LoginViewHtml) {
+       function(_, Backbone, $, BaseView, bootstrap, CRMApp, CRMToken, HomeView, LoginViewHtml) {
        
-            var LoginView = Backbone.View.extend({
-                el: 'body',
+            var LoginView = BaseView.extend({
 
-                events: {
-                    'click #login': 'login'
+                events: function(){
+                    return _.extend({}, BaseView.prototype.events,{
+                        'click #login': 'login'
+                    });
                 },
                 
                 initialize: function(options) {
@@ -74,6 +76,10 @@ define(['underscore', 'backbone', 'jquery', 'bootstrap',
                     });
                     
                     return this;
+                },
+                
+                linkToHome: function(evt) {
+                    //dummy function to override BaseView.linkToHome
                 }
             });
        

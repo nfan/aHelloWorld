@@ -1,4 +1,5 @@
 define(['underscore', 'backbone', 'jquery',
+        'view/BaseView',
         'library/CRMApp',
         'library/CRMStore',
         'library/CRMUtil',
@@ -8,18 +9,21 @@ define(['underscore', 'backbone', 'jquery',
         'library/SyncManager'
        ],
        
-       function(_, Backbone, $, CRMApp, CRMStore, CRMUtil, CRMTemplateCollection, CRMTemplate, TemplateViewHtml, SyncManager) {
+       function(_, Backbone, $, BaseView, CRMApp, CRMStore, CRMUtil, CRMTemplateCollection, CRMTemplate, TemplateViewHtml, SyncManager) {
        
-            var HomeView = Backbone.View.extend({
-                el: 'body',
-                
+            var HomeView = BaseView.extend({
+
                 templates: {},
                 
                 cur_template_id: 0,
                 
-                events: {
-                    'click #list a': 'selectTemplate'
-                },
+                events: function(){
+                      return _.extend({}, BaseView.prototype.events,{
+                            'click #list a': 'selectTemplate'
+                      });
+                   },
+                
+                
                 
                 initialize: function(options) {
                     _.bindAll(this, 'render', 'fetchAndRender', 'reFetchTemplates', 'selectTemplate');

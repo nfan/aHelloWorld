@@ -5,15 +5,17 @@ define(['underscore', 'backbone',
 
 function(_, Backbone, BaseController, CRMApp, ListView) {
 
-    var ListController = new BaseController();
-    
-    ListController.prototype.index = function(parameters) {
-        if (typeof this.view == 'undefined') {
-            this.view = new ListView();
-        }
+    var ListController = _.extend(    
+        {
+            index : function(parameters) {
+                if (typeof this.view == 'undefined') {
+                    this.view = new ListView();
+                }
 
-        this.view.fetchAndRender(parameters['template_id']);
-    };
+                this.view.fetchAndRender(parameters['template_id']);
+            }
+        }, BaseController
+    );
     
     return ListController;
 });

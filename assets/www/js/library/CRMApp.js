@@ -18,6 +18,7 @@ function(_, Backbone, CRMToken, CRMStore, CRMUtil) {
                 "login":            "login",
                 "home/:action":     "home",
                 "list/:tmpl_id":    "list",
+                "form/:action/:tmpl_id":    "form",
                 "form/:action/:tmpl_id/:formdata_id":    "form"
                 //more routes
             },

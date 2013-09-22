@@ -5,15 +5,16 @@ define(['underscore', 'backbone',
 
 function(_, Backbone, BaseController, CRMApp, LoginView) {
 
-    var LoginController = new BaseController();
-    
-    LoginController.prototype.index = function(parameters) {
-        if (typeof this.view == 'undefined') {
-            this.view = new LoginView();
-        }
-       
-        this.view.render();
-    };
-    
+    var LoginController = _.extend(
+        {
+           index : function(parameters) {
+                if (typeof this.view == 'undefined') {
+                    this.view = new LoginView();
+                }
+               
+                this.view.render();
+            }
+        }, BaseController
+    );
     return LoginController;
 });
