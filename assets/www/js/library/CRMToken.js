@@ -34,7 +34,7 @@ define(['underscore', 'backbone', 'jquery'],
                     return false;
                 }
        
-                return true;
+                return false;
             }
        
             CRMToken.prototype.getToken = function() {

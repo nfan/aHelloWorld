@@ -1,13 +1,13 @@
 define(['underscore', 'Backbone', 'jquery',
+        'view/BaseView',
         'model/XYZCollection',
         'model/XYZ',
         'text!view/XYZView.html!strip'
        ],
        
-       function(_, Backbone, $, XYZCollection, XYZ, XYZViewHtml) {
+       function(_, Backbone, $, BaseView, XYZCollection, XYZ, XYZViewHtml) {
        
-            var XYZView = Backbone.View.extend({
-                el: 'body',
+            var XYZView = BaseView.extend({
 
                 events: {
                     'click #navigator li a': 'showXYZ'

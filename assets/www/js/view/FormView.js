@@ -1,25 +1,30 @@
 define(['jquery', 'backbone', 'underscore',
+        'view/BaseView',
         'library/CRMApp',
         'library/CRMStore',
         'library/CRMUtil',
         'text!view/FormView.html!strip',
         'model/CRMFormData'
         ],
-        function($, Backbone, _, CRMApp, CRMStore, CRMUtil, FormViewTemplate, CRMFormData) {
+        function($, Backbone, _, BaseView, CRMApp, CRMStore, CRMUtil, FormViewTemplate, CRMFormData) {
 
-    var FormView = Backbone.View.extend({
-        el:'body',
+    var FormView = BaseView.extend({
+
         cur_template_id : 0,
         cur_formdata_id : 0,
         state: 'view',
         
-        events: {
-            "click a.linkToList": 'linkToList',
-            "click a.linkToEdit": 'linkToEdit',
-            "click button.submit": 'submit'
-        },
+        events: function(){
+              return _.extend({}, BaseView.prototype.events,{
+                    "click a.linkToList": 'linkToList',
+                    "click a.linkToEdit": 'linkToEdit',
+                    "click button.submit": 'submit'
+              });
+           },
+
         initialize: function() {
             _.bindAll(this, 'render', 'resetFormData', 'fetchAndRender');
+            this.c_date = new Date();
         },
          
         render: function() {
@@ -35,7 +40,7 @@ define(['jquery', 'backbone', 'underscore',
             }
             
             if (!CRMUtil.isEmpty(compiled_template) && !CRMUtil.isEmpty(template)) {
-                if (that.state == 'edit') {
+                if (that.state == 'edit' || that.state == 'add') {
                     html = compiled_template.form({template: template, formdata:that.formdata});
                 } else {
                     html = compiled_template.view({template: template, formdata:that.formdata});
@@ -64,44 +69,79 @@ define(['jquery', 'backbone', 'underscore',
                     var that = this;
 
                     var formDataCollection = CRMStore.getFormDataCollection(that.cur_template_id);
-                    that.formdata = formDataCollection.get(that.cur_formdata_id);                                                                            
+                    
+                    if (that.cur_formdata_id == 0) {
+                        /*var newObj = new CRMFormData({collection: formDataCollection});
+                        formDataCollection.add(newObj);
+                        that.formdata = newObj;*/
+                        that.formdata = new CRMFormData();
+                        
+                    } else {
+                    
+                        that.formdata = formDataCollection.get(that.cur_formdata_id);
+                    }
                     if (typeof callback == 'function') {
                       callback();
                     }
         },
         
         linkToList: function(evt) {
+                    evt.preventDefault();
+                    evt.stopPropagation();
+                    
                     var that = this;
 
                     CRMApp.getRouter().navigateTo("list/"+that.cur_template_id);
         },
         
         linkToEdit: function(evt) {
+                    evt.preventDefault();
+                    evt.stopPropagation();
+                    
                     var that = this;
 
                     CRMApp.getRouter().navigateTo("form/edit/"+that.cur_template_id+"/"+that.cur_formdata_id);
         },
         
         submit: function(evt) {
+                    evt.preventDefault();
+                    evt.stopPropagation();
+                    
                     var that = this;
                     
                     var formDataCollection = CRMStore.getFormDataCollection(that.cur_template_id);
                     
-                    if (typeof that.formdata == 'undefined') {
-                      that.formdata = new CRMFormData({collection: formDataCollection}); 
-                    }
                     
-                    $("#formdata input").each(function(i, item){
-                        that.formdata.set($(this).attr("name"), $(this).val());  
-                    });
-                    
-                    that.formdata.save(null, {error: function() {
-                        alert('failed!');
-                    },
-                    success: function () {
+                    if (that.state == 'add') {
+                        var newObj = {};
                         
-                        alert('saved!');
-                    }});
+                        $("#formdata input").each(function(i, item){
+                            newObj[$(this).attr("name")] = $(this).val();  
+                        });
+                        
+                        formDataCollection.create(newObj, {error: function() {
+                            alert('failed!');
+                        },
+                        success: function (model, resp) {
+                            that.formdata = model;
+                            alert('saved!');
+                        }});
+                        
+                        //that.formdata = newObj;
+                        
+                    } else if (that.state == 'edit') {
+                        $("#formdata input").each(function(i, item){
+                            that.formdata.set($(this).attr("name"), $(this).val());  
+                        });
+                        
+                        that.formdata.save(null, {error: function() {
+                            alert('failed!');
+                        },
+                        success: function () {
+                            
+                            alert('saved!');
+                        }});
+                    }
         }
     });
     

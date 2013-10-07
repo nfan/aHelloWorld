@@ -154,7 +154,7 @@ function(_, Backbone, CRMToken, CRMUtil) {
     }
     
     CRMStore.write = function(key, value) {
-        if (CRMUtil.isEmpty(value)) {
+        if (!CRMUtil.isEmpty(value)) {
             localStorage.setItem(key, JSON.stringify(value));
         }
     }

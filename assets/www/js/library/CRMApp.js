@@ -18,6 +18,7 @@ function(_, Backbone, CRMToken, CRMStore, CRMUtil) {
                 "login":            "login",
                 "home/:action":     "home",
                 "list/:tmpl_id":    "list",
+                "form/:action/:tmpl_id":    "form",
                 "form/:action/:tmpl_id/:formdata_id":    "form"
                 //more routes
             },
@@ -26,8 +27,13 @@ function(_, Backbone, CRMToken, CRMStore, CRMUtil) {
                 _.bindAll(this, 'navigateTo', 'login', 'home', 'list', 'form');
             },
             
-            navigateTo: function(url) {
-                this.navigate(url, {trigger: true});
+            navigateTo: function(hash) {
+                //trick from https://github.com/jashkenas/backbone/issues/652
+                if (Backbone.history.fragment === hash) {
+                    Backbone.history.loadUrl(hash);
+                } else {
+                    this.navigate(hash, {trigger: true});
+                }
             },
             
             login: function() {
@@ -70,7 +76,12 @@ function(_, Backbone, CRMToken, CRMStore, CRMUtil) {
         
         that.base_url = "http://fannan.co";
         that.version = "0.0";
-        that.token = new CRMToken("0");
+        var token = that.getToken();
+        if (CRMUtil.isEmpty(token)) {
+        	token = new CRMToken("0");
+      	} 
+      	
+      	that.token = token;
         that.router = new CRMRouter();
         that.controllers = [];
     };
@@ -91,17 +102,20 @@ function(_, Backbone, CRMToken, CRMStore, CRMUtil) {
     
     CRMApp.getToken = function() {
         if (CRMUtil.isEmpty(CRMApp.token)) {
-            var token = CRMStore.read('token');
+            var token = CRMStore.read('CRMToken');
        
-            if (!empty(token)) {
-                CRMApp.token = token;
+            if (!CRMUtil.isEmpty(token)) {
+            		var t = new CRMToken(token.token, token.ttl);
+                CRMApp.token = t;
+            } else {
+            		CRMApp.token = new CRMToken(0);
             }
         }
         return CRMApp.token;
     };
     
     CRMApp.setToken = function(token) {
-        CRMStore.write('token', token);
+        CRMStore.write('CRMToken', token);
         CRMApp.token = token;
     };
     

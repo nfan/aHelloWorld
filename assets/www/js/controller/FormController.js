@@ -5,15 +5,26 @@ define(['underscore', 'backbone',
 
 function(_, Backbone, BaseController, CRMApp, FormView) {
 
-    var FormController = new BaseController();
-    
-    FormController.prototype.index = function(parameters) {
-        if (typeof this.view == 'undefined') {
-            this.view = new FormView();
-        }
+    var FormController = _.extend(
+        {
+            index:function(parameters) {
+                if (typeof this.view == 'undefined') {
+                    this.view = new FormView();
+                }
 
-        this.view.fetchAndRender(parameters['template_id'], parameters['formdata_id'], parameters['action']);
-    };
+                if ( parameters['action'] == 'add' ) {
+                        this.add(parameters);
+                } else {
+                    this.view.fetchAndRender(parameters['template_id'], parameters['formdata_id'], parameters['action']);
+                }
+            },
+            
+            add: function(parameters) {
+                this.view.fetchAndRender(parameters['template_id'], 0, parameters['action']);
+            }
+        }, BaseController
+        
+    );
     
     return FormController;
 });

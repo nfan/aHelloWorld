@@ -431,7 +431,7 @@
       Sync.prototype.flushItem = function(sid) {
         var model,
           _this = this;
-        model = this.collection.fakeModel(sid);
+        model = this.collection.items.fakeModel(sid);		//FANTBD: override faked url with model url
         return this.ajax('delete', model, {
           success: function(model, opts) {
             return _this.storage.destroyIds.remove(sid);

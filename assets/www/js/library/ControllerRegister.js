@@ -40,22 +40,22 @@ function(_, Backbone, CRMApp,
         var app = CRMApp.getInstance();
         _.extend(app, Backbone.Events);
        
-        var login_controller = new LoginController();
+        var login_controller = LoginController;
         app.on("login", function(parameters) {
             login_controller.index(parameters);
         });
        
-        var home_controller = new HomeController();
+        var home_controller = HomeController;
         app.on("home", function(parameters) {
             home_controller.index(parameters);
         });
        
-        var list_controller = new ListController();
+        var list_controller = ListController;
         app.on("list", function(parameters) {
             list_controller.index(parameters);
         });
         
-        var form_controller = new FormController();
+        var form_controller = FormController;
         app.on("form", function(parameters) {
             form_controller.index(parameters);
         });
