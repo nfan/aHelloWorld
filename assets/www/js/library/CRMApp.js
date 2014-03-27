@@ -74,7 +74,7 @@ function(_, Backbone, CRMToken, CRMStore, CRMUtil) {
 
         var that = CRMApp.getInstance();
         
-        that.base_url = "http://fannan.co";
+        that.base_url = "http://test.52zuocai.com";
         that.version = "0.0";
         var token = that.getToken();
         if (CRMUtil.isEmpty(token)) {
